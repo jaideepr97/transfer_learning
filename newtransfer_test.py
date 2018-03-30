@@ -1,7 +1,8 @@
 import numpy 
 import tensorflow as tf 
+import pickle
 #from newtransfer_test import dictionary
-from newtransfer_pretrain import get_dictionary
+#from newtransfer_pretrain import get_dictionary
 #from sklearn.cross_validation import train_test_split
 import pandas as pd
 
@@ -21,7 +22,9 @@ def classify():
     #lvl2_x = dataset4.iloc[25:32, 0].values.tolist()
     
     dataset4 = pd.read_csv("our_data/heights1.csv")
-    dictionary = get_dictionary()
+    #dictionary = get_dictionary()
+    with open("mySavedDict_movie_reviews_data.txt", "rb") as myFile:
+        dictionary = pickle.load(myFile)
     lvl0_x = dataset4.iloc[0:15, 0].values.tolist()
     lvl1_x = dataset4.iloc[16:26, 0].values.tolist()
     lvl2_x = dataset4.iloc[27:36, 0].values.tolist()
@@ -32,8 +35,8 @@ def classify():
 
     embedding_size = 4
     sess = tf.Session()
-    new_saver = tf.train.import_meta_graph('word_embeddings_from_our_data/word_embeddings_from_our_data.meta')
-    new_saver.restore(sess, 'word_embeddings_from_our_data/word_embeddings_from_our_data')
+    new_saver = tf.train.import_meta_graph('word_embeddings_from_movie_reviews_data/word_embeddings_from_movie_reviews_data.meta')
+    new_saver.restore(sess, 'word_embeddings_from_movie_reviews_data/word_embeddings_from_movie_reviews_data')
     all_vars = tf.get_collection('vars')
     #new_saver = tf.train.import_meta_graph('test_model.meta')
     #new_saver.restore(sess, 'test_model')
@@ -81,14 +84,14 @@ def classify():
     #updates = tf.train.GradientDescentOptimizer(0.01).minimize(cost)
     #sess = tf.InteractiveSession()
     
-    new_saver = tf.train.import_meta_graph('trainedmodeltemp20.meta')
+    new_saver = tf.train.import_meta_graph('trainedmodel(29-3-18).meta')
     with tf.Session() as sess:
         
         
         #w_1 = sess.run('w_1:0')
         #w_2 = sess.run('w_2:0')
         
-        new_saver.restore(sess,"trainedmodeltemp20")
+        new_saver.restore(sess,"trainedmodel(29-3-18)")
        
         
         

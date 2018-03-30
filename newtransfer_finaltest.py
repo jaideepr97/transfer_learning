@@ -8,31 +8,32 @@ Created on Wed Mar 21 17:33:04 2018
 
 import numpy 
 import tensorflow as tf 
-from newtransfer_pretrain import get_dictionary
+#from newtransfer_pretrain import get_dictionary
 import pandas as pd
-
+import pickle 
 def classify(sentence):
      global x_sent, y_sent, X, y,v,dictionary
-     dictionary = get_dictionary()
-      
+     #dictionary = get_dictionary()
+     with open("mySavedDict_movie_reviews_data.txt", "rb") as myFile:
+        dictionary = pickle.load(myFile) 
      embedding_size = 4
      sess = tf.Session()
-     new_saver = tf.train.import_meta_graph('word_embeddings_from_our_data/word_embeddings_from_our_data.meta')
-     new_saver.restore(sess, 'word_embeddings_from_our_data/word_embeddings_from_our_data')
+     new_saver = tf.train.import_meta_graph('word_embeddings_from_movie_reviews_data/word_embeddings_from_movie_reviews_data.meta')
+     new_saver.restore(sess, 'word_embeddings_from_movie_reviews_data/word_embeddings_from_movie_reviews_data')
      all_vars = tf.get_collection('vars')
      for v in all_vars:
         v = sess.run(v)
         
-     print(sentence.split())
+     #print(sentence.split())
      x_sent = numpy.zeros((1, embedding_size), dtype=numpy.float)
      #x_sent = numpy.average( [v[dictionary[word]] for word in user_sentence.split() if word in dictionary], axis=0)
      #x_sent = numpy.transpose(x_sent)
      x_size = embedding_size
      y_size = 3
      h_size = 4
-     new_saver = tf.train.import_meta_graph('trainedmodeltemp20.meta')
+     new_saver = tf.train.import_meta_graph('trainedmodel(29-3-18).meta')
      with tf.Session() as sess:
-         new_saver.restore(sess,"trainedmodeltemp20")
+         new_saver.restore(sess,"trainedmodel(29-3-18)")
          X = tf.placeholder("float", shape=[None, x_size])
          #y = tf.placeholder("float", shape=[None, y_size])
         

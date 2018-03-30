@@ -25,7 +25,7 @@ def build_dataset(words):
     else:
       index = 0
     data.append(index)
-  with open("mySavedDict.txt", "wb") as myFile:
+  with open("mySavedDict_movie_reviews_data.txt", "wb") as myFile:
     pickle.dump(dictionary, myFile)  
   return data, dictionary
 
@@ -56,11 +56,16 @@ def generate_batch(batch_size, num_skips, skip_window):
 
 def create_embeddings():
     global vocabulary_size, data_index, dataset4, total_words
-    dataset4 = pd.read_csv("our_data/heights1.csv")
-    dataset5 = pd.read_csv("our_data/unassigned_water.csv")
-    dataset6 = pd.read_csv("our_data/unassigned_failrej.csv")
-    dataset7 = pd.read_csv("our_data/unassigned_rejelon.csv")
+    #dataset4 = pd.read_csv("our_data/heights1.csv")
+    #dataset5 = pd.read_csv("our_data/unassigned_water.csv")
+    #dataset6 = pd.read_csv("our_data/unassigned_failrej.csv")
+    #dataset7 = pd.read_csv("our_data/unassigned_rejelon.csv")
 
+    dataset4 = pd.read_csv("movie_reviews_data/test-pos.csv")
+    dataset5 = pd.read_csv("movie_reviews_data/test-neg.csv")
+    dataset6 = pd.read_csv("movie_reviews_data/train-pos.csv")
+    dataset7 = pd.read_csv("movie_reviews_data/train-neg.csv")
+    
     X = dataset4.iloc[:, 0].values.tolist()
     Y = dataset5.iloc[:, 0].values.tolist()
     Z = dataset6.iloc[:, 0].values.tolist()
@@ -75,7 +80,7 @@ def create_embeddings():
         for x in words:
             if x not in total_words:
                 total_words.append(x)
-    vocabulary_size = 300
+    vocabulary_size = 3000000
 
     data, dictionary = build_dataset(total_words)
     data_index = 0
@@ -131,8 +136,8 @@ def create_embeddings():
       f_embed = tf.convert_to_tensor(final_embeddings, dtype = tf.float32)    
       tf.add_to_collection('vars', f_embed)   
       saver = tf.train.Saver()
-      saver.save(session, "/home/jaideeprao/Desktop/transfer_learning/word_embeddings_from_our_data/word_embeddings_from_our_data")
-
+      #saver.save(session, "/home/jaideeprao/Desktop/transfer_learning/word_embeddings_from_our_data/word_embeddings_from_our_data")
+      saver.save(session, "/home/jaideeprao/Desktop/transfer_learning/word_embeddings_from_movie_reviews_data/word_embeddings_from_movie_reviews_data")
 
 
 

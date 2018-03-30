@@ -13,7 +13,7 @@ def shuffle_in_unison_scary(a, b):
 
 
 def classify():
-    global x_sent, y_sent, train_X, test_X, train_y, test_y, dictionary, v, k 
+    global x_sent, y_sent, train_X, test_X, train_y, test_y, dictionary, v, k, test_accuracy 
     dataset4 = pd.read_csv("our_data/heights1.csv")
     #   dictionary = get_dictionary()
     lvl0_x = dataset4.iloc[0:15, 0].values.tolist()
@@ -29,12 +29,12 @@ def classify():
     #new_saver = tf.train.import_meta_graph('word_embeddings_from_our_data/word_embeddings_from_our_data.meta')
     #new_saver.restore(sess, 'word_embeddings_from_our_data/word_embeddings_from_our_data')
     
-    new_saver = tf.train.import_meta_graph('word_embeddings_from_movie_reviews_data/test_model.meta')
-    new_saver.restore(sess, 'word_embeddings_from_movie_reviews_data/test_model')
+    new_saver = tf.train.import_meta_graph('word_embeddings_from_movie_reviews_data/word_embeddings_from_movie_reviews_data.meta')
+    new_saver.restore(sess, 'word_embeddings_from_movie_reviews_data/word_embeddings_from_movie_reviews_data')
     
     
     all_vars = tf.get_collection('vars')
-    with open("mySavedDict.txt", "rb") as myFile:
+    with open("mySavedDict_movie_reviews_data.txt", "rb") as myFile:
         dictionary = pickle.load(myFile)
     #new_saver = tf.train.import_meta_graph('test_model.meta')
     #new_saver.restore(sess, 'test_model')
@@ -88,10 +88,10 @@ def classify():
     sess = tf.InteractiveSession()
     init = tf.global_variables_initializer()
     sess.run(init)
-    #file = open("current_highest_test_accuracy.txt","r") 
-    #k = file.read()
-    #k = float(k)
-    #file.close()
+    file = open("current_highest_test_accuracy.txt","r") 
+    k = file.read()
+    k = float(k)
+    file.close()
     
 
     for epoch in range(1500):
@@ -102,20 +102,20 @@ def classify():
          test_accuracy  = numpy.mean(numpy.argmax(test_y, axis=1) == sess.run(predict, feed_dict={X: test_X, y: test_y}))
          print("Epoch = %d, train accuracy = %.2f%%, test accuracy = %.2f%%" % (epoch + 1, 100. * train_accuracy, 100. * test_accuracy))
          #print("Epoch = %d, train accuracy = %.2f%%" % (epoch + 1, 100. * train_accuracy))
-         #if(test_accuracy > k):
-         #k = test_accuracy
-         #file = open("current_highest_test_accuracy.txt","w")
-         #file.write(k)
-         #file.close()
-         #saver = tf.train.Saver({"w_1":w_1, "w_2":w_2})
-         #saver.save(sess, "/home/jaideeprao/Desktop/transfer_learning/trainedmodeltemp20")
+         if(test_accuracy > k):
+             k = test_accuracy
+             file = open("current_highest_test_accuracy.txt","w")
+             file.write(str(k))
+             file.close()
+             saver = tf.train.Saver({"w_1":w_1, "w_2":w_2})
+             saver.save(sess, "/home/jaideeprao/Desktop/transfer_learning/trainedmodel(29-3-18)")
      
      
 
     
     
-    saver = tf.train.Saver({"w_1":w_1, "w_2":w_2})
-    saver.save(sess, "/home/jaideeprao/Desktop/transfer_learning/trainedmodeltemp10")
+    #saver = tf.train.Saver({"w_1":w_1, "w_2":w_2})
+    #saver.save(sess, "/home/jaideeprao/Desktop/transfer_learning/trainedmodel(29-3-18)")
     
     #w_1 = sess.run('w_1:0')
     #w_2 = sess.run('w_2:0')
