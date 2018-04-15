@@ -5,17 +5,18 @@ from gensim.models.wrappers import FastText
 import settings
 
 Main_Path = os.path.join(settings.default_path, 'clusterGenerator')
-print(Main_Path)
 os.chdir(Main_Path)
-model = FastText.load_fasttext_format('sample_vectors.bin')
 
-filtered_sentence = []
-returned_words = []
+print("Loading fasttext model")
+model = FastText.load_fasttext_format('sample_vectors.bin')
+print("Loaded")
 
 def return_list(sent):
-	x = sent
-	filtered_sentence= re.sub("[^\w]", " ",  x).split()
-
+	returned_words = []
+	filtered_sentence = re.sub("[^\w]", " ",  sent).split()
 	for word in filtered_sentence:
-		returned_words.append(model.most_similar(word))
+		try:
+			returned_words.append(model.most_similar(word))
+		except KeyError:
+			continue
 	return returned_words
