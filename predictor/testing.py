@@ -13,14 +13,14 @@ def shuffle_in_unison_scary(a, b):
     p = numpy.random.permutation(len(a))
     return a[p], b[p]
 
-def predict(reviews, labels):
-    # global dataset_test, v, dictionary, x_sent, y_sent, reviews, labels
-    # dataset = pd.read_csv("yelp_labelled.csv",  delimiter="\t")
+def predict():
+    global dataset_test, v, dictionary, x_sent, y_sent, reviews, labels
+    dataset = pd.read_csv("yelp_labelled.csv",  delimiter="\t")
     with open("mySavedDict_movie_reviews_data.txt", "rb") as myFile:
         dictionary = pickle.load(myFile)
-    # dataset_test = dataset.iloc[100:150, 0:2]
-    # reviews = dataset_test.iloc[:, 0].values.tolist()
-    # labels = dataset_test.iloc[:, 1].values.tolist()
+    dataset_test = dataset.iloc[400:450, 0:2]
+    reviews = dataset_test.iloc[:, 0].values.tolist()
+    labels = dataset_test.iloc[:, 1].values.tolist()
 
     embedding_size = 4
     no_of_labels = 2
@@ -28,8 +28,8 @@ def predict(reviews, labels):
     with open("word_embeddings_from_movie_reviews_data/word_embeddings_from_movie_reviews_data.txt", "rb") as myFile:
         v = pickle.load(myFile)
         v = numpy.asarray(v, dtype=float)
-    x_sent = numpy.zeros(((len(reviews)), embedding_size), dtype=numpy.float)
-    y_sent = numpy.zeros(((len(reviews)), no_of_labels), dtype=numpy.float)
+    x_sent = numpy.zeros(((len(dataset_test)), embedding_size), dtype=numpy.float)
+    y_sent = numpy.zeros(((len(dataset_test)), no_of_labels), dtype=numpy.float)
 
     for i, sent in enumerate(reviews):
         if(labels[i] == 1):
@@ -86,14 +86,14 @@ def predict(reviews, labels):
       accuracy = graph.get_tensor_by_name("accuracy:0")
     #  predict = tf.argmax(yhat, dimension=1, name="predict")
 
-      # print(sess.run(W1))
-      # print(sess.run(b1))
-      # print(sess.run(W2))
-      # print(sess.run(b2))
+      print(sess.run(W1))
+      print(sess.run(W2))
+      print(sess.run(b1))
+      print(sess.run(b2))
       print(sess.run(accuracy, feed_dict={x:x_sent, y: y_sent}))
 
 
-# predict()
+predict()
 
 #  test_accuracy  = numpy.mean(numpy.argmax(y_sent, axis=1) == sess.run(predict, feed_dict={x: x_sent, y: y_sent}))
 #  print(test_accuracy)

@@ -28,11 +28,10 @@ os.chdir(Main_Path)
 # print("Loaded")
 
 def word2vec_words(sent, i):
-    print("Loading model number {} for w2v in w2vGen".format(i))
+    # print("Loading model number {} for w2v in w2vGen".format(i))
     # model = gensim.models.Word2Vec(settings.tok_corp, min_count=1)
     model = gensim.models.Word2Vec.load("w2vmodel{}".format(i))
-    print("Loaded")
+    # print("Loaded")
     x = sent
     filtered_sentence= re.sub("[^\w]", " ",  x).split()
     return model.predict_output_word(filtered_sentence)
-    

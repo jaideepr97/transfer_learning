@@ -7,9 +7,9 @@ import settings
 Main_Path = os.path.join(settings.default_path, 'clusterGenerator')
 os.chdir(Main_Path)
 
-print("Loading fasttext model")
+# print("Loading fasttext model")
 model = FastText.load_fasttext_format('sample_vectors.bin')
-print("Loaded")
+# print("Loaded")
 
 def return_list(sent):
 	returned_words = []

@@ -29,3 +29,7 @@
 
 # loaded_model = gensim.models.Word2Vec.load("w2vmodel")
 # print(loaded_model.predict_output_word(["great"]))
+
+from predictor.training import classify
+
+classify()

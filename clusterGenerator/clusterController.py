@@ -27,10 +27,10 @@ os.chdir(Main_Path)
 # tok_corp = [nltk.word_tokenize(sent) for sent in x]
 # print("Loaded")
 #
-print("Loading w2v model in clusterContoller")
+# print("Loading w2v model in clusterContoller")
 # model = gensim.models.Word2Vec(settings.tok_corp, min_count=1)
 model = gensim.models.Word2Vec.load("w2vmodel0")
-print("Loading")
+# print("Loading")
 
 stop_words = set(stopwords.words('english'))
 stop_words.add("I")
@@ -58,7 +58,7 @@ def backend(strr, testvar, index, filtered_sentence):
     maybe_present = []
 
     fasttext_return = return_list(strr)
-    print("Received fasttext cluster")
+    # print("Received fasttext cluster")
     n = len(fasttext_return)
     i = 0
     while i < n:
@@ -72,7 +72,7 @@ def backend(strr, testvar, index, filtered_sentence):
     j = 1
     while j <= settings.no_of_w2v_iterations:
         cmd_returned.append(word2vec_words(testvar, j))
-        print("Received w2v cluster number {}".format(j))
+        # print("Received w2v cluster number {}".format(j))
         j = j + 1
 
     new_cmd_returned = [item for sublist in cmd_returned for item in sublist]
