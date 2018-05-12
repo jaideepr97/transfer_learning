@@ -29,7 +29,7 @@ os.chdir(Main_Path)
 #
 # print("Loading w2v model in clusterContoller")
 # model = gensim.models.Word2Vec(settings.tok_corp, min_count=1)
-model = gensim.models.Word2Vec.load("w2vmodel0")
+model = gensim.models.Word2Vec.load(os.path.join(settings.default_path, 'clusterGenerator/w2v_models/w2v_movie_reviews/w2vmodel0'))
 # print("Loading")
 
 stop_words = set(stopwords.words('english'))
@@ -76,10 +76,12 @@ def backend(strr, testvar, index, filtered_sentence):
         j = j + 1
 
     new_cmd_returned = [item for sublist in cmd_returned for item in sublist]
-    new_collected_cmd_returned = [(uk, sum([vv for kk,vv in new_cmd_returned if kk==uk])/5 ) for uk in set([k for k,v in new_cmd_returned])]
+    new_collected_cmd_returned = [(uk, sum([vv for kk,vv in new_cmd_returned if kk==uk])/(settings.no_of_w2v_iterations) ) for uk in set([k for k,v in new_cmd_returned])]
 
     new_collected_cmd_returned = sorted(new_collected_cmd_returned)
 
+    for word in filtered_sentence:
+        present.append(word)
 
     for word in new_collected_cmd_returned:
         for element in filtered_sentence:

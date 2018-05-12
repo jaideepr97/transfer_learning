@@ -28,6 +28,8 @@ os.chdir(Main_Path)
 # print("Loaded")
 
 def word2vec_words(sent, i):
+    Main_Path = os.path.join(settings.default_path, 'clusterGenerator/w2v_models/w2v_movie_reviews')
+    os.chdir(Main_Path)
     # print("Loading model number {} for w2v in w2vGen".format(i))
     # model = gensim.models.Word2Vec(settings.tok_corp, min_count=1)
     model = gensim.models.Word2Vec.load("w2vmodel{}".format(i))
