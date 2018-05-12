@@ -16,7 +16,8 @@ def shuffle_in_unison_scary(a, b):
 def predict(reviews, labels):
     # global dataset_test, v, dictionary, x_sent, y_sent, reviews, labels
     # dataset = pd.read_csv("yelp_labelled.csv",  delimiter="\t")
-    with open("mySavedDict_movie_reviews_data.txt", "rb") as myFile:
+    # with open("mySavedDict_movie_reviews_data.txt", "rb") as myFile:
+    with open(os.path.join(settings.default_path, 'data/Dictionaries/movie_reviews/mySavedDict_movie_reviews_data.txt'), "rb") as myFile:
         dictionary = pickle.load(myFile)
     # dataset_test = dataset.iloc[100:150, 0:2]
     # reviews = dataset_test.iloc[:, 0].values.tolist()
@@ -25,7 +26,8 @@ def predict(reviews, labels):
     embedding_size = 4
     no_of_labels = 2
 
-    with open("word_embeddings_from_movie_reviews_data/word_embeddings_from_movie_reviews_data.txt", "rb") as myFile:
+    # with open("word_embeddings_from_movie_reviews_data/word_embeddings_from_movie_reviews_data.txt", "rb") as myFile:
+    with open(os.path.join(settings.default_path, 'predictor/pretraining_models/movie_reviews/word_embeddings_from_movie_reviews_data.txt'), "rb") as myFile:
         v = pickle.load(myFile)
         v = numpy.asarray(v, dtype=float)
     x_sent = numpy.zeros(((len(reviews)), embedding_size), dtype=numpy.float)
@@ -50,8 +52,10 @@ def predict(reviews, labels):
     with tf.Session() as sess:
     #  new_saver = tf.train.import_meta_graph('testsaver.meta')
 
-      new_saver = tf.train.import_meta_graph('tensnet/trainedmodel(17-4-18).meta')
-      new_saver.restore(sess, 'tensnet/trainedmodel(17-4-18)')
+      # new_saver = tf.train.import_meta_graph('tensnet/trainedmodel(17-4-18).meta')
+      new_saver = tf.train.import_meta_graph(os.path.join(settings.default_path, 'predictor/trained_models/yelp_labelled/yelp_labelled.meta'))
+      # new_saver.restore(sess, 'tensnet/trainedmodel(17-4-18)')
+      new_saver.restore(sess, os.path.join(settings.default_path, 'predictor/trained_models/yelp_labelled/yelp_labelled'))
     #  new_saver = tf.train.import_meta_graph('tensnet/best_model_yet(81.82)/trainedmodel(7-4-18).meta')
     #  new_saver.restore(sess, 'tensnet/best_model_yet(81.82)/trainedmodel(7-4-18)')
 

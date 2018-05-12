@@ -25,6 +25,9 @@ x = x1 + x2 + x3 + x4
 tok_corp = [nltk.word_tokenize(sent) for sent in x]
 print("Loaded")
 
+Main_Path = os.path.join(settings.default_path, 'clusterGenerator/w2v_models/w2v_movie_reviews')
+os.chdir(Main_Path)
+
 print("Creating w2v model 0")
 model = gensim.models.Word2Vec(tok_corp, min_count=1)
 model.save("w2vmodel0")

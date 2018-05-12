@@ -1,2 +1,10 @@
-data/
-clusterGenerator/sample_vectors.bin
+data/extra/
+data/log/
+data/movie_reviews_data/
+data/our_data/
+data/output/
+clusterGenerator/fasttext_models/
+clusterGenerator/w2v_models/
+predictor/pretraining_models/
+predictor/trained_models/
+

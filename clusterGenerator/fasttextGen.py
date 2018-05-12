@@ -4,11 +4,11 @@ import os
 from gensim.models.wrappers import FastText
 import settings
 
-Main_Path = os.path.join(settings.default_path, 'clusterGenerator')
+Main_Path = os.path.join(settings.default_path, 'clusterGenerator/fasttext_models/fast_movie_reviews')
 os.chdir(Main_Path)
 
 # print("Loading fasttext model")
-model = FastText.load_fasttext_format('sample_vectors.bin')
+model = FastText.load_fasttext_format('fast_model.bin')
 # print("Loaded")
 
 def return_list(sent):

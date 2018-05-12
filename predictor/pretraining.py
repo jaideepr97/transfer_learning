@@ -2,10 +2,14 @@ import collections, math, random, numpy
 import tensorflow as tf
 #from sklearn.cross_validation import train_test_split
 import pandas as pd
-#import os
+import os
 #import nltk
+import settings
 from nltk.corpus import stopwords
 import pickle
+
+Main_Path = os.path.join(settings.default_path, 'data')
+os.chdir(Main_Path)
 
 #sentences = """hated the movie it was stupid;\ni hated it so boring;\nawesome the movie was inspiring;\nhated it what a disaster;\nwe hated the movie they were idiotic;\nhe was stupid, hated her;\nstupid movie is boring;\ninspiring ourselves, awesome;\ninspiring me, brilliant;\nwe hated it they were rubbish;\nany inspiring movie is amazing;\nit was stupid what a disaster;\nits stupid, rubbish;\nstupid, idiotic!;\nawesome great movie;\nboring, must be hated;\nhe was boring the movie was stupid;\nboring movie was a disaster;\nboth boring and rubbish;\nso boring and idiotic;\ngreat to amazing;\ndisaster, more than hated;\nbetween disaster and stupid;\ndisaster, so boring;\nawesome movie, brilliant;\ntoo awesome she was amazing;\nhe was brilliant loved it;\ndisaster, only idiotic;\nrubbish movie hated him;\nit was rubbish, why so stupid?;\nrubbish, too boring;\nrubbish, disaster!;\nrubbish, very idiotic;\nidiotic movie hated it;\nshe was idiotic, so stupid;\nidiotic movie, it was boring;\nit was idiotic, movie was a disaster;\nidiotic and rubbish;\nI loved it, it was awesome;\nhe was stupid, hated her;\nbrilliant, loved it;\nloved the movie amazing;\nit was great loved the movie;\nmovie was great, inspiring;\ngreat movie, awesome;\nthey were great, brilliant;\ngreat amazing!;\nThey were inspiring loved it;\ninspiring movie great;\nawesome loved it;\nthey were brilliant great movie;\nshe was brilliant the movie was inspiring;\nhe was brilliant between them they were awesome;\nbrilliant, above amazing;\njust amazing loved it;\ndisaster, o what rubbish;\nabove amazing beyond inspiring;\nso amazing movie was awesome;\namazing brilliant movie;"""
 #words = [word for word in sentences.replace(';', '').replace('!', '').replace('?', '').replace(',', '').lower().split() if word.lower() not in ['it', 'movie', 'the' 'was', 'were', 'so', 'a', 'i', 'he', 'her', 'me', 'any', 'its', 'be', 'they', 'and']]
@@ -25,8 +29,8 @@ def build_dataset(words):
     else:
       index = 0
     data.append(index)
-  with open("mySavedDict_movie_reviews_data.txt", "wb") as myFile:
-    pickle.dump(dictionary, myFile)  
+  with open(os.path.join(settings.default_path, 'data/Dictionaries/movie_reviews/mySavedDict_movie_reviews_data1.txt'), "wb") as myFile:
+    pickle.dump(dictionary, myFile)
   return data, dictionary
 
 def get_dictionary():
@@ -56,16 +60,16 @@ def generate_batch(batch_size, num_skips, skip_window):
 
 def create_embeddings():
     global vocabulary_size, data_index, dataset4, total_words
-    #dataset4 = pd.read_csv("our_data/heights1.csv")
-    #dataset5 = pd.read_csv("our_data/unassigned_water.csv")
-    #dataset6 = pd.read_csv("our_data/unassigned_failrej.csv")
-    #dataset7 = pd.read_csv("our_data/unassigned_rejelon.csv")
+    # dataset4 = pd.read_csv("our_data/heights1.csv")
+    # dataset5 = pd.read_csv("our_data/unassigned_water.csv")
+    # dataset6 = pd.read_csv("our_data/unassigned_failrej.csv")
+    # dataset7 = pd.read_csv("our_data/unassigned_rejelon.csv")
 
     dataset4 = pd.read_csv("movie_reviews_data/test-pos.csv")
     dataset5 = pd.read_csv("movie_reviews_data/test-neg.csv")
     dataset6 = pd.read_csv("movie_reviews_data/train-pos.csv")
     dataset7 = pd.read_csv("movie_reviews_data/train-neg.csv")
-    
+
     X = dataset4.iloc[:, 0].values.tolist()
     Y = dataset5.iloc[:, 0].values.tolist()
     Z = dataset6.iloc[:, 0].values.tolist()
@@ -74,14 +78,14 @@ def create_embeddings():
     corpus = []
     total_words = []
     corpus = X + Y + Z + W
-
+    #corpus = Y
     for i in range(0,len(corpus)):
         words = [word for word in corpus[i].lower().split() if word.lower() not in set(stopwords.words('english'))]
         for x in words:
             if x not in total_words:
                 total_words.append(x)
-    vocabulary_size = 3000000
-
+    vocabulary_size = 300
+    # vocabulary_size = 100000
     data, dictionary = build_dataset(total_words)
     data_index = 0
     batch_size = 20
@@ -133,11 +137,12 @@ def create_embeddings():
         _, loss_val, normalized_embeddings_np = session.run([optimizer, loss, normalized_embeddings], feed_dict=feed_dict)
         average_loss += loss_val
       final_embeddings = normalized_embeddings.eval()
-      f_embed = tf.convert_to_tensor(final_embeddings, dtype = tf.float32)    
-      tf.add_to_collection('vars', f_embed)   
+      f_embed = tf.convert_to_tensor(final_embeddings, dtype = tf.float32)
+      tf.add_to_collection('vars', f_embed)
       saver = tf.train.Saver()
       #saver.save(session, "/home/jaideeprao/Desktop/transfer_learning/word_embeddings_from_our_data/word_embeddings_from_our_data")
-      saver.save(session, "/home/jaideeprao/Desktop/transfer_learning/word_embeddings_from_movie_reviews_data/word_embeddings_from_movie_reviews_data")
+      # saver.save(session, "/home/jaideeprao/Desktop/transfer_learning/word_embeddings_from_movie_reviews_data/word_embeddings_from_movie_reviews_data")
+      saver.save(session, os.path.join((settings.default_path),'predictor/pretraining_models/movie_reviews/word_embeddings_from_movie_reviews_data'))
 
 
 
@@ -187,8 +192,8 @@ create_embeddings()
 #         sess.run(updates, feed_dict={X: train_X[i: i + 1], y: train_y[i: i + 1]})
 #     train_accuracy = numpy.mean(numpy.argmax(train_y, axis=1) == sess.run(predict, feed_dict={X: train_X, y: train_y}))
 #     test_accuracy  = numpy.mean(numpy.argmax(test_y, axis=1) == sess.run(predict, feed_dict={X: test_X, y: test_y}))
-#     #print(sess.run(predict, feed_dict={X: train_X, y: train_y}))    
-#     #print(sess.run(predict, feed_dict={X: train_X, y: train_y}))    
+#     #print(sess.run(predict, feed_dict={X: train_X, y: train_y}))
+#     #print(sess.run(predict, feed_dict={X: train_X, y: train_y}))
 #     print("Epoch = %d, train accuracy = %.2f%%, test accuracy = %.2f%%" % (epoch + 1, 100. * train_accuracy, 100. * test_accuracy))
 
 # sess.close()

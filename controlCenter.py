@@ -13,7 +13,7 @@ resulting_input_cluster = []
 
 
 print("Loading test data")
-input_data = pandas.read_csv('yelp_labelled_1.csv', delimiter="\t")
+input_data = pandas.read_csv('yelp_labelled.csv', delimiter="\t")
 trunc_input_data = input_data.iloc[90:105, 0:2]
 trunc_input_labels = trunc_input_data.iloc[:, 1].values.tolist()
 trunc_input_reviews = input_data.iloc[0:20, 0:2].values.tolist()

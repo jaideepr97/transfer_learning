@@ -8,7 +8,7 @@ import pickle
 from nltk.corpus import stopwords
 returned_words = []
 
-Main_Path = os.path.join(settings.default_path, 'data')
+Main_Path = os.path.join(settings.default_path, 'clusterGenerator/w2v_models/w2v_movie_reviews')
 os.chdir(Main_Path)
 
 # print("Loading data for w2v model in w2vGen")

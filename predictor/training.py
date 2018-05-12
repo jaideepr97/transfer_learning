@@ -25,17 +25,19 @@ def classify():
     embedding_size = 4
     no_of_labels = 2
     with tf.Session() as sess:
-        new_saver = tf.train.import_meta_graph('word_embeddings_from_movie_reviews_data/word_embeddings_from_movie_reviews_data.meta')
-        new_saver.restore(sess, 'word_embeddings_from_movie_reviews_data/word_embeddings_from_movie_reviews_data')
+        new_saver = tf.train.import_meta_graph(os.path.join(settings.default_path, 'predictor/pretraining_models/movie_reviews/word_embeddings_from_movie_reviews_data.meta'))
+        new_saver.restore(sess, (os.path.join(settings.default_path, 'predictor/pretraining_models/movie_reviews/word_embeddings_from_movie_reviews_data')))
 
         graph = tf.get_default_graph()
 
         all_vars = tf.get_collection('vars')
-        with open("mySavedDict_movie_reviews_data.txt", "rb") as myFile:
+        # with open("mySavedDict_movie_reviews_data.txt", "rb") as myFile:
+        with open(os.path.join(Main_Path, 'Dictionaries/movie_reviews/mySavedDict_movie_reviews_data.txt'), "rb") as myFile:
             dictionary = pickle.load(myFile)
         for v in all_vars:
             v = sess.run(v)
-            with open("word_embeddings_from_movie_reviews_data/word_embeddings_from_movie_reviews_data.txt", "wb") as myFile:
+            # with open("word_embeddings_from_movie_reviews_data/word_embeddings_from_movie_reviews_data.txt", "wb") as myFile:
+            with open(os.path.join(settings.default_path, 'predictor/pretraining_models/movie_reviews/word_embeddings_from_movie_reviews_data.txt'), "wb") as myFile:
                 pickle.dump(v, myFile)
 
     x_sent = numpy.zeros(((len(dataset_train)), embedding_size), dtype=numpy.float)
@@ -107,22 +109,25 @@ def classify():
             test_accuracy  = numpy.mean(numpy.argmax(test_y, axis=1) == sess.run(predict, feed_dict={x: test_X, y: test_y}))
             print("Epoch = %d, train accuracy = %.2f%%, test accuracy = %.2f%%" % (epoch + 1, 100. * train_accuracy, 100. * test_accuracy))
             print(sess.run(predict, feed_dict={x: test_X, y: test_y}))
-            if(test_accuracy > k):
-                 k = test_accuracy
-                 file = open("current_highest_test_accuracy.txt","w")
-                 file.write(str(k))
-                 file.close()
-                 saver = tf.train.Saver()
-                 saver.save(sess, "/home/jaideeprao/Desktop/finalStretch/predictor/tensnet/trainedmodel(17-4-18)")
+            # if(test_accuracy > k):
+            #      k = test_accuracy
+            #      file = open("current_highest_test_accuracy.txt","w")
+            #      file.write(str(k))
+            #      file.close()
+            #      saver = tf.train.Saver()
+            #      # saver.save(sess, "/home/jaideeprao/Desktop/finalStretch/predictor/trained_models/yelp_labelled")
+            #      saver.save(sess, os.path.join(settings.default_path, 'predictor/trained_models/yelp_labelled/yelp_labelled'))
         print (tf.shape(x))
         print (tf.shape(y))
-        # saver = tf.train.Saver()
+
         # writer = tf.summary.FileWriter('./log/', sess.graph)
         print(sess.run(W1))
         print(sess.run(W2))
         print(sess.run(b1))
         print(sess.run(b2))
         # saver.save(sess, "/home/jaideeprao/Desktop/finalStretch/predictor/tensnet/trainedmodel(17-4-18)")
+        saver = tf.train.Saver()
+        saver.save(sess, os.path.join(settings.default_path, 'predictor/trained_models/yelp_labelled/yelp_labelled'))
         writer.close()
 
 
