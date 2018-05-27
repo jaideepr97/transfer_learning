@@ -118,8 +118,9 @@ def backend(strr, testvar, index, filtered_sentence):
 
     cluster = present + maybe_present
     new_clust = ' '.join(cluster)
-    print("Printing cluster for sentence {}".format(index + 1))
-    print(new_clust)
+    # print("Printing cluster for sentence {}".format(index + 1))
+    print("working on sentence {}".format(index + 1))
+    # print(new_clust)
     return new_clust
 
 

@@ -29,7 +29,7 @@ def build_dataset(words):
     else:
       index = 0
     data.append(index)
-  with open(os.path.join(settings.default_path, 'data/Dictionaries/movie_reviews/mySavedDict_movie_reviews_data1.txt'), "wb") as myFile:
+  with open(os.path.join(settings.default_path, 'data/Dictionaries/gutenberg-1/mySavedDict_gutenberg_1_data.txt'), "wb") as myFile:
     pickle.dump(dictionary, myFile)
   return data, dictionary
 
@@ -65,26 +65,28 @@ def create_embeddings():
     # dataset6 = pd.read_csv("our_data/unassigned_failrej.csv")
     # dataset7 = pd.read_csv("our_data/unassigned_rejelon.csv")
 
-    dataset4 = pd.read_csv("movie_reviews_data/test-pos.csv")
-    dataset5 = pd.read_csv("movie_reviews_data/test-neg.csv")
-    dataset6 = pd.read_csv("movie_reviews_data/train-pos.csv")
-    dataset7 = pd.read_csv("movie_reviews_data/train-neg.csv")
+    dataset4 = pd.read_csv("anarchism.csv")
+
+    # dataset4 = pd.read_csv("movie_reviews_data/test-pos.csv")
+    # dataset5 = pd.read_csv("movie_reviews_data/test-neg.csv")
+    # dataset6 = pd.read_csv("movie_reviews_data/train-pos.csv")
+    # dataset7 = pd.read_csv("movie_reviews_data/train-neg.csv")
 
     X = dataset4.iloc[:, 0].values.tolist()
-    Y = dataset5.iloc[:, 0].values.tolist()
-    Z = dataset6.iloc[:, 0].values.tolist()
-    W = dataset7.iloc[:, 0].values.tolist()
+    # Y = dataset5.iloc[:, 0].values.tolist()
+    # Z = dataset6.iloc[:, 0].values.tolist()
+    # W = dataset7.iloc[:, 0].values.tolist()
 
     corpus = []
     total_words = []
-    corpus = X + Y + Z + W
-    #corpus = Y
+    # corpus = X + Y + Z + W
+    corpus = X
     for i in range(0,len(corpus)):
         words = [word for word in corpus[i].lower().split() if word.lower() not in set(stopwords.words('english'))]
         for x in words:
             if x not in total_words:
                 total_words.append(x)
-    vocabulary_size = 300
+    vocabulary_size = 10700
     # vocabulary_size = 100000
     data, dictionary = build_dataset(total_words)
     data_index = 0
@@ -142,7 +144,8 @@ def create_embeddings():
       saver = tf.train.Saver()
       #saver.save(session, "/home/jaideeprao/Desktop/transfer_learning/word_embeddings_from_our_data/word_embeddings_from_our_data")
       # saver.save(session, "/home/jaideeprao/Desktop/transfer_learning/word_embeddings_from_movie_reviews_data/word_embeddings_from_movie_reviews_data")
-      saver.save(session, os.path.join((settings.default_path),'predictor/pretraining_models/movie_reviews/word_embeddings_from_movie_reviews_data'))
+
+      saver.save(session, os.path.join((settings.default_path),'predictor/pretraining_models/gutenberg-1/word_embeddings_from_gutenberg_1_data'))
 
 
 

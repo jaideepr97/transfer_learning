@@ -14,6 +14,8 @@ def shuffle_in_unison_scary(a, b):
     return a[p], b[p]
 
 def predict(reviews, labels):
+    # print(len(reviews))
+    # print(len(labels))
     # global dataset_test, v, dictionary, x_sent, y_sent, reviews, labels
     # dataset = pd.read_csv("yelp_labelled.csv",  delimiter="\t")
     # with open("mySavedDict_movie_reviews_data.txt", "rb") as myFile:
@@ -34,6 +36,8 @@ def predict(reviews, labels):
     y_sent = numpy.zeros(((len(reviews)), no_of_labels), dtype=numpy.float)
 
     for i, sent in enumerate(reviews):
+
+        # print(i)
         if(labels[i] == 1):
             y_sent[i, 1] = 1
         else:
@@ -94,8 +98,11 @@ def predict(reviews, labels):
       # print(sess.run(b1))
       # print(sess.run(W2))
       # print(sess.run(b2))
-      print(sess.run(accuracy, feed_dict={x:x_sent, y: y_sent}))
-
+      k = sess.run(accuracy, feed_dict={x:x_sent, y: y_sent})
+      print(k)
+      file = open("testing_accuracy_list.txt_(movie-movie-movie)","a")
+      file.write(str(k))
+      file.write("\n")
 
 # predict()
 
